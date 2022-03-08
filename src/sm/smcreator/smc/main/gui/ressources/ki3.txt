@@ -1,0 +1,11 @@
+zzz=xml.documentElement;
+if(q==null){
+}else{
+	q.parentNode.removeChild(q);
+}
+gg.appendChild(zzz);	
+});
+}
+//ex(1);
+</script>	
+<article  id="xyz">		

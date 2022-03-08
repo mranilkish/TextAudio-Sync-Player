@@ -1,0 +1,24 @@
+	<script>
+	(function(){
+	var root = document.getElementById('xyz');
+	var xyzaudio = root.getElementsByTagName('audio')[0];
+	var wordTimes = [];
+	Array.prototype.forEach.call(root.querySelectorAll("[dbn]"), function(word){
+		var wordTime = {
+			begin : parseFloat(word.getAttribute("dbn")),
+			dur   : parseFloat(word.getAttribute("ddr")),
+			word  : word
+		};
+		wordTime.index = wordTimes.length;
+		wordTime.end = wordTime.begin + wordTime.dur;
+		word.setAttribute('dti', wordTime.index);
+		wordTimes.push(wordTime);
+	});
+	/**
+	 * Find the next word that should be played (or that is currently being played)
+	 * @todo Note: this would better be implemented as a binary search
+	 */ 
+	function getNextWordTime(){
+		
+		var wordTime = null,
+			currentTime = xyzaudio.currentTime;

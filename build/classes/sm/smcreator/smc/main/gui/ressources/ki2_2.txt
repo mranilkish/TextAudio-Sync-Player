@@ -1,0 +1,9 @@
+<div id="resizable">
+<div id="viz"></div>
+</div>
+<script type="text/javascript">
+var gg=document.getElementById("viz");
+function ex(nn)
+{
+var zzz;
+var q=gg.children[0];

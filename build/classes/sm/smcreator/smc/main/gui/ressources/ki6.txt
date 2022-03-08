@@ -1,0 +1,74 @@
+for(var i = 0, len = wordTimes.length; i < len; i++){
+			var thisWordTime = wordTimes[i];
+			if((currentTime >= thisWordTime.begin && currentTime < thisWordTime.end) || currentTime < wordTimes[i].begin)
+			{
+				return thisWordTime;
+			}
+		}
+		return null;
+	}
+	var timeoutSelectNext;
+	function removeSelection(){		
+		Array.prototype.forEach.call(root.querySelectorAll('span[dbn].speaking'), function(el){
+			el.className = el.className.replace(/\s*speaking\b/, ''); 
+		});
+	}
+	function selectNextWord(hold){
+		clearTimeout(timeoutSelectNext);
+		var next = getNextWordTime();
+		if(next){
+			function select(hold){
+				removeSelection();				
+				next.word.className += ' speaking'; 				
+				if(!hold){
+					timeoutSelectNext = setTimeout(function(){
+						removeSelection();
+						if(!xyzaudio.paused)
+							selectNextWord();
+					}, Math.round((next.end - xyzaudio.currentTime)*1000));
+				}
+			}
+			//Select now
+			if(hold || xyzaudio.currentTime >= next.begin){
+				select(hold);
+			}
+			//Select later
+			else {
+				timeoutSelectNext = setTimeout(function(){
+					select();
+				}, Math.round((next.begin - xyzaudio.currentTime)*1000));
+			}
+		}
+	}
+	xyzaudio.addEventListener('play', function(e){
+		selectNextWord();
+	}, false);
+	xyzaudio.addEventListener('pause', function(e){
+		clearTimeout(timeoutSelectNext);
+	}, false);
+	root.addEventListener('click', function(e){
+		if(e.target.hasAttribute('dbn')){
+			var i = e.target.getAttribute('dti');
+			//audio.currentTime = wordTimes[i].begin + wordTimes[i].dur/2; //@TODO
+			xyzaudio.currentTime = wordTimes[i].begin + 0.001; //Note: times apparently cannot be exactly set and sometimes select too early
+			selectNextWord();
+		}
+	}, false);
+	/**
+	 * Play a word when double-clicking (event delegation)
+	 * Only plays the single word.
+	 */
+	root.addEventListener('dblclick', function(e){
+		xyzaudio.play();
+	}, false);
+	/**
+	 * Select a word when seeking
+	 */
+	xyzaudio.addEventListener('seeked', function(e){
+		selectNextWord(e.target.paused /* for hold, probably always true */);
+	}, false);
+	})();
+	</script>
+</article>
+</body>
+</html>

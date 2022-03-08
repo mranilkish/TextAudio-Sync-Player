@@ -1,0 +1,43 @@
+<style>
+#resizable { 
+border: 0;
+position:relative; 
+float:left; 
+width: 536px; 
+height: 331px; 
+padding: 0.7em;
+top:28px;
+left:2px;
+z-index: 0; }
+h1
+{
+	 text-shadow: 2px 2px 3px rgba(144, 150, 150, 1);
+width: 20px;
+color:#110000;
+background-color:#00000;
+position:relative;
+top:1%;
+left:50%;
+width:100%;
+height:40px;
+
+}
+article{
+	text-shadow: 3px 2px 6px rgba(144, 150, 150, 0.72);
+}
+audio{
+	position: fixed;
+	top:1%;
+	left:1%;
+}
+</style>
+<script>
+$(document).scroll(function() {
+    var top = $(document).scrollTop();
+   $("#resizable").css("marginTop", top);
+});
+$(function() {
+$( "#resizable" ).resizable();
+});
+</script>
+</head>
